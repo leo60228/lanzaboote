@@ -116,6 +116,13 @@ impl FromStr for SystemdVersion {
                 minor: -1,
                 patch: rc_str.parse()?,
             })
+        } else if let Some((major_str, _)) = s.split_once("-unstable-") {
+            // A version that looks like: 253-unstable-2020-01-01
+            Ok(Self {
+                major: major_str.parse::<u32>()? + 1,
+                minor: -1,
+                patch: 0,
+            })
         } else if let Some((major_str, minor_str)) = s.split_once('.') {
             // A version that looks like: 253.7
             Ok(Self {
